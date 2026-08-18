@@ -13,7 +13,7 @@ struct AddHabitView: View {
 
     @Environment(\.dismiss) private var dismiss
     @State private var name = ""
-    @State private var selectedEmoji = HabitPresets.emojis[0]
+    @State private var selectedEmoji = HabitPresets.defaultEmoji
     @State private var selectedColor = HabitPresets.colors[0]
 
     private let emojiColumns = Array(repeating: GridItem(.flexible()), count: 6)
@@ -82,7 +82,8 @@ struct AddHabitView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Add") {
-                        onSave(name.trimmingCharacters(in: .whitespacesAndNewlines), selectedEmoji, selectedColor)
+                        let emoji = selectedEmoji.isEmpty ? HabitPresets.defaultEmoji : selectedEmoji
+                        onSave(name.trimmingCharacters(in: .whitespacesAndNewlines), emoji, selectedColor)
                         dismiss()
                     }
                     .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)

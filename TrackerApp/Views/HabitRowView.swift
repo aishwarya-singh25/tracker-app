@@ -40,7 +40,15 @@ struct HabitRowView: View {
             .buttonStyle(.plain)
         }
         .padding(16)
-        .background(Color(hex: habit.color), in: RoundedRectangle(cornerRadius: 16))
+        .background(
+            LinearGradient(
+                colors: [Color(hex: habit.color), Color(hex: habit.color).opacity(0.85)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            ),
+            in: RoundedRectangle(cornerRadius: 18)
+        )
+        .shadow(color: Color(hex: habit.color).opacity(0.35), radius: 10, x: 0, y: 4)
     }
 }
 

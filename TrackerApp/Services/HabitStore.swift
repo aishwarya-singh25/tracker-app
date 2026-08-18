@@ -143,6 +143,42 @@ final class HabitStore: ObservableObject {
         }
     }
 
+    /// Reorders habits within a single time block (drag-to-reorder in the
+    /// UI), reassigning sequential `sort_order` values and persisting them.
+    func reorder(in block: TimeBlock, from source: IndexSet, to destination: Int, userId: UUID) async {
+        let previousHabits = habits
+
+        var blockHabits = habits(in: block)
+        let moving = source.map { blockHabits[$0] }
+        for index in source.sorted(by: >) {
+            blockHabits.remove(at: index)
+        }
+        let adjustedDestination = destination - source.filter { $0 < destination }.count
+        blockHabits.insert(contentsOf: moving, at: adjustedDestination)
+
+        for (index, habit) in blockHabits.enumerated() {
+            blockHabits[index].sortOrder = index
+        }
+
+        // Splice the reordered block back into the full habits array.
+        var otherHabits = habits.filter { $0.timeBlock != block }
+        otherHabits.append(contentsOf: blockHabits)
+        habits = otherHabits
+
+        do {
+            for habit in blockHabits {
+                try await client
+                    .from("habits")
+                    .update(["sort_order": habit.sortOrder])
+                    .eq("id", value: habit.id)
+                    .execute()
+            }
+        } catch {
+            habits = previousHabits
+            errorMessage = "Couldn't save the new order — check your connection and try again."
+        }
+    }
+
     /// Soft-deletes a habit (sets archived_at) rather than a hard delete —
     /// reversible, and keeps historical logs intact.
     func archiveHabit(_ habit: Habit) async {
