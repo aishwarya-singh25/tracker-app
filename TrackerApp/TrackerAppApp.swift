@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct TrackerAppApp: App {
+    @StateObject private var auth = AuthManager()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
+                .environmentObject(auth)
         }
     }
 }
