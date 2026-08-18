@@ -45,6 +45,12 @@ target for v1.
 - **Scope:** this is a real build (not a throwaway prototype) — intended for
   daily personal use once done. No hard deadline; take the time needed to do
   it right.
+- **Distribution: free Apple ID only, no paid Developer Program** — the app
+  is for personal use on one phone, not public App Store distribution.
+  Deployed by running from Xcode onto the phone directly. Consequence: the
+  install expires every 7 days and must be re-run from Xcode to keep
+  working (a free-tier limitation, not a bug). HealthKit (Phase 3, below)
+  is permanently unavailable unless this decision is revisited later.
 
 ## Fast-follow features (not v1, planned for later)
 
@@ -53,10 +59,9 @@ target for v1.
   data (e.g. sleep goal, step count) instead of manual check-off.
   - Straightforward to add in native Swift (`import HealthKit`), same
     project, no new tooling.
-  - Requires a **paid Apple Developer Program account** — HealthKit
-    entitlements are confirmed paid-only, unlike App Groups (see widget
-    section below) — and a physical iPhone to test (simulator has no real
-    Health data).
+  - **On hold indefinitely** — requires a paid Apple Developer Program
+    account, and the decision (see above) is to stay on the free tier.
+    Revisit only if that decision changes.
   - iOS only — would not carry over to Android/web if built later.
 
 ## Screens (v1)
@@ -133,22 +138,13 @@ user — fetch-on-load/fetch-on-resume is sufficient.
 4. Date navigation — 7-day strip, viewing/editing past days.
 5. Polish pass — empty states, color/emoji picker UX, loading/offline
    handling.
-6. Run on personal device via Xcode (free, own Apple ID) for daily use —
-   note the 7-day re-sign limit on a free account until the paid Developer
-   Program is enrolled.
+6. Run on personal device via Xcode (free, own Apple ID) — this **is** the
+   deployment method for this app (see "Distribution" decision above).
+   Re-run from Xcode every 7 days to renew the install.
 7. Widget (fast-follow phase) — add Widget Extension target, App Groups.
-8. HealthKit auto check-off (fast-follow phase) — requires paid Developer
-   Program account.
-9. TestFlight / App Store submission — requires paid Developer Program
-   account; listing, screenshots, privacy nutrition label (relevant once
-   HealthKit is added, since Apple requires disclosure of health-data
-   usage).
-
-## Open item to confirm before/during deployment
-
-- **Apple Developer Program enrollment** ($99/year) — status unconfirmed as
-  of this writing. Not required to build or run on your own device via
-  Xcode with a free Apple ID (steps 1–7 above), but required for HealthKit
-  (step 8) and for TestFlight/App Store distribution (step 9). Worth
-  confirming/starting enrollment before those phases since approval can
-  take a day or two.
+   Works fine on the free tier.
+8. ~~HealthKit auto check-off~~ — on hold indefinitely, requires paid
+   Developer Program account (see "Distribution" decision above).
+9. ~~TestFlight / App Store submission~~ — not planned; would require the
+   paid Developer Program account. Revisit only if the distribution
+   decision changes.
