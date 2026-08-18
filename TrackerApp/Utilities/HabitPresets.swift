@@ -9,9 +9,16 @@
 import Foundation
 
 enum HabitPresets {
+    /// The emoji assigned when a habit has none selected — a generic,
+    /// habit-agnostic glyph rather than anything category-specific.
+    static let defaultEmoji = "💡"
+
     /// Curated icon set for habits. Any human/person glyph uses the female
-    /// presentation (e.g. "🏃‍♀️" not "🏃") for consistency.
+    /// presentation (e.g. "🏃‍♀️" not "🏃") for consistency. Not exhaustive —
+    /// the Add/Edit Habit screen also lets you type any emoji from your
+    /// keyboard, so this is just a quick-pick shortlist.
     static let emojis = [
+        defaultEmoji,
         // Fitness & movement
         "🏃‍♀️", "🚶‍♀️", "🏋️‍♀️", "🤸‍♀️", "🚴‍♀️", "🧘‍♀️", "🏊‍♀️", "⛹️‍♀️",
         // Mindfulness & rest
@@ -26,18 +33,16 @@ enum HabitPresets {
         "🎨", "🎸", "📖", "🎧", "🧵", "📷",
     ]
 
-    /// The emoji assigned when a habit has none selected.
-    static let defaultEmoji = emojis[0]
-
-    /// Hex strings, chosen to read clearly as both a background fill and text-legible.
+    /// Hex strings for the habit-card background — soft/pastel tints so
+    /// dark text stays legible on top of them.
     static let colors = [
-        "#4C6FFF", // blue
-        "#34C77B", // green
-        "#FF7A59", // coral
-        "#A8763E", // brown
-        "#8A6DFF", // purple
-        "#F2555A", // red
-        "#3FC0C0", // teal
-        "#5B8DEF", // periwinkle
+        "#DCE4FF", // light blue
+        "#D9F5E3", // light green
+        "#FFE1D6", // light coral
+        "#F2E4D2", // light tan
+        "#E7E1FF", // light purple
+        "#FFDCE1", // light pink/red
+        "#D7F5F2", // light teal
+        "#E4EAFB", // light periwinkle
     ]
 }

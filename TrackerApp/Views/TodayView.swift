@@ -42,7 +42,7 @@ struct TodayView: View {
             }
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
-            .background(Color.white)
+            .background(Color(.systemGroupedBackground))
             .safeAreaInset(edge: .top) {
                 VStack(spacing: 16) {
                     DateStripView(selectedDate: $selectedDate)
@@ -58,7 +58,7 @@ struct TodayView: View {
                 .padding(.horizontal)
                 .padding(.top, 8)
                 .padding(.bottom, 4)
-                .background(Color.white)
+                .background(Color(.systemGroupedBackground))
             }
             .navigationTitle(navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
@@ -91,7 +91,7 @@ struct TodayView: View {
     }
 
     private var allHabitsToday: [Habit] {
-        TimeBlock.allCases.flatMap { store.habits(in: $0) }
+        store.orderedHabits
     }
 
     @ViewBuilder
@@ -166,6 +166,7 @@ struct TodayView: View {
         }
         .padding(.horizontal)
         .padding(.top, 8)
+        .padding(.bottom, 10)
         .textCase(nil)
     }
 

@@ -16,6 +16,7 @@ struct EditHabitView: View {
     @State private var name: String
     @State private var selectedEmoji: String
     @State private var selectedColor: String
+    @State private var customEmojiInput = ""
 
     private let emojiColumns = Array(repeating: GridItem(.flexible()), count: 6)
 
@@ -47,6 +48,22 @@ struct EditHabitView: View {
                         }
                     }
                     .padding(.vertical, 4)
+
+                    HStack {
+                        Text("Or type any emoji")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        TextField("🙂", text: $customEmojiInput)
+                            .multilineTextAlignment(.trailing)
+                            .frame(width: 60)
+                            .onChange(of: customEmojiInput) { _, newValue in
+                                if let lastCharacter = newValue.last {
+                                    selectedEmoji = String(lastCharacter)
+                                }
+                                customEmojiInput = ""
+                            }
+                    }
                 }
 
                 Section("Color") {

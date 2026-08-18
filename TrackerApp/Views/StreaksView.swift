@@ -54,7 +54,7 @@ struct StreaksView: View {
                 }
             }
 
-            ForEach(store.habits) { habit in
+            ForEach(store.orderedHabits) { habit in
                 GridRow {
                     HStack(spacing: 6) {
                         Text(habit.emoji)
@@ -91,7 +91,7 @@ struct StreaksView: View {
 
         Circle()
             .fill(isCompleted ? Color(hex: habit.color) : Color.secondary.opacity(0.15))
-            .frame(width: 28, height: 28)
+            .frame(width: 20, height: 20)
             .opacity(isFuture ? 0.4 : 1)
     }
 }

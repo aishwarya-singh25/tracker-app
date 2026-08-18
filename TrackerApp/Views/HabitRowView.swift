@@ -11,6 +11,11 @@ struct HabitRowView: View {
     let streak: Int
     let onToggle: () -> Void
 
+    /// Card backgrounds are pastel now, so text/icons use a fixed dark tone
+    /// (not `.primary`, which would flip to white in dark mode) to stay
+    /// legible against them regardless of system appearance.
+    private let textColor = Color.black.opacity(0.78)
+
     var body: some View {
         HStack(spacing: 12) {
             Text(habit.emoji)
@@ -18,7 +23,7 @@ struct HabitRowView: View {
 
             Text(habit.name)
                 .font(.headline)
-                .foregroundStyle(.white)
+                .foregroundStyle(textColor)
                 .lineLimit(1)
 
             Spacer()
@@ -29,13 +34,13 @@ struct HabitRowView: View {
                     Text("\(streak)")
                 }
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.white)
+                .foregroundStyle(textColor)
             }
 
             Button(action: onToggle) {
                 Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
                     .font(.title2)
-                    .foregroundStyle(.white, isCompleted ? .white.opacity(0.25) : .clear)
+                    .foregroundStyle(textColor, isCompleted ? Color.black.opacity(0.12) : .clear)
             }
             .buttonStyle(.plain)
         }
@@ -48,7 +53,7 @@ struct HabitRowView: View {
             ),
             in: RoundedRectangle(cornerRadius: 18)
         )
-        .shadow(color: Color(hex: habit.color).opacity(0.35), radius: 10, x: 0, y: 4)
+        .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 3)
     }
 }
 

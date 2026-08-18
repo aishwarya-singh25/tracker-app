@@ -76,7 +76,14 @@ final class HabitStore: ObservableObject {
     }
 
     func habits(in block: TimeBlock) -> [Habit] {
-        habits.filter { $0.timeBlock == block }
+        habits.filter { $0.timeBlock == block }.sorted { $0.sortOrder < $1.sortOrder }
+    }
+
+    /// All habits across every time block, in the same Morning → Night,
+    /// sort_order-within-block order shown on the Today screen — used
+    /// anywhere else (e.g. Streaks) that lists habits together.
+    var orderedHabits: [Habit] {
+        TimeBlock.allCases.flatMap { habits(in: $0) }
     }
 
     /// Toggles a habit's completion for the given day, writing straight to
