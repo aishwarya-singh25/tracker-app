@@ -10,12 +10,20 @@ target for v1.
 
 ## Decisions locked in
 
-- **Stack:** Expo (React Native + TypeScript) for the app, Supabase
-  (Postgres) for auth + data sync, email OTP (6-digit code) for login.
-  - Rationale: zero cost to start, easy to reason about as a first app,
-    reusable toward a website later (React Native Web + same Supabase
-    backend works well with Next.js), and easy to add more users later
-    (schema is already multi-user-safe via Supabase Row-Level Security).
+- **Stack:** Native Swift + SwiftUI (Xcode) for the app, Supabase (Postgres,
+  via the `supabase-swift` SDK) for auth + data sync, email OTP (6-digit
+  code) for login.
+  - Rationale: single stack, no bridge layer — the app, the widget
+    (WidgetKit), and later HealthKit are all plain Swift/SwiftUI, which is
+    the most natural fit for all three. Fully free to build and test on your
+    own device with a personal Apple ID (only publishing to TestFlight/App
+    Store needs the $99/year Apple Developer Program). Backend (Supabase)
+    stays framework-agnostic, so it's still reusable if a website is ever
+    built later — just not the UI code, which is iOS-only.
+  - Trade-off accepted: this replaces the earlier Expo/React Native plan.
+    The app's UI code will *not* carry over to a future website (that would
+    be a separate build against the same Supabase backend), and it's
+    Swift-only rather than JS/TS.
 - **Habit scheduling:** one habit belongs to exactly one time block
   (Morning/Afternoon/Evening/Night) — no duplicates across blocks.
 - **Habit type (v1):** simple done/not-done check-off only. No quantified
@@ -43,18 +51,18 @@ target for v1.
 - **Home-screen widget** showing the weekly dot-grid view.
 - **Apple HealthKit integration** — auto-mark habits done based on Health
   data (e.g. sleep goal, step count) instead of manual check-off.
-  - No stack change required; needs a custom native dev client (EAS Build,
-    not plain Expo Go) since HealthKit is native-only — the same build setup
-    the widget already requires.
-  - Requires a **paid Apple Developer Program account** (HealthKit
-    entitlements aren't available on free accounts) and a physical iPhone to
-    test (simulator has no real Health data).
+  - Straightforward to add in native Swift (`import HealthKit`), same
+    project, no new tooling.
+  - Requires a **paid Apple Developer Program account** — HealthKit
+    entitlements are confirmed paid-only, unlike App Groups (see widget
+    section below) — and a physical iPhone to test (simulator has no real
+    Health data).
   - iOS only — would not carry over to Android/web if built later.
 
 ## Screens (v1)
 
 1. **Sign in** — email input → 6-digit OTP input. Session persisted on-device
-   (Expo SecureStore) so sign-in isn't required every launch.
+   (iOS Keychain) so sign-in isn't required every launch.
 2. **Home / Today**
    - 7-day date strip at the top to navigate between days; today highlighted.
    - Four sections — Morning / Afternoon / Evening / Night — each with a
@@ -104,37 +112,43 @@ user — fetch-on-load/fetch-on-resume is sufficient.
 
 ## Widget architecture (fast-follow)
 
-- Native WidgetKit extension (Swift), added via an Expo config plugin /
-  prebuild — this moves the project off plain "Expo Go" onto a custom dev
-  client / EAS Build (needed for HealthKit too, later).
+- WidgetKit extension target added directly in Xcode (File → New → Target →
+  Widget Extension), built with SwiftUI like the main app — no bridge
+  tooling needed.
 - Data sharing: main app writes the current week's completion grid into a
-  shared **App Group** container (JSON file or shared UserDefaults) whenever
-  a habit is toggled; the widget reads from that shared container — no
-  network call from the widget itself, so it stays fast and works offline.
+  shared **App Group** container (UserDefaults or a small shared
+  SwiftData/CoreData store) whenever a habit is toggled; the widget reads
+  from that shared container — no network call from the widget itself, so
+  it stays fast and works offline. App Groups work fine on a free personal
+  Apple ID for local testing, no paid account needed for this part.
 - Widget requests a timeline reload whenever the shared data changes.
 
 ## Build order
 
-1. Project scaffold — Expo + TypeScript, navigation, Supabase project +
-   schema + RLS policies.
-2. Auth — email OTP sign-in/out, session persistence.
+1. Project scaffold — Xcode project (App template, SwiftUI + Swift), add
+   `supabase-swift` package, Supabase project + schema + RLS policies.
+2. Auth — email OTP sign-in/out, session persistence via Keychain.
 3. Core Today screen — time blocks, add/edit habit, check-off, streak
    calculation.
 4. Date navigation — 7-day strip, viewing/editing past days.
 5. Polish pass — empty states, color/emoji picker UX, loading/offline
    handling.
-6. TestFlight — once the Apple Developer account is confirmed enrolled, get
-   the app on-device for daily use.
-7. Widget (fast-follow phase).
-8. HealthKit auto check-off (fast-follow phase).
-9. App Store submission — listing, screenshots, privacy nutrition label
-   (relevant once HealthKit is added, since Apple requires disclosure of
-   health-data usage).
+6. Run on personal device via Xcode (free, own Apple ID) for daily use —
+   note the 7-day re-sign limit on a free account until the paid Developer
+   Program is enrolled.
+7. Widget (fast-follow phase) — add Widget Extension target, App Groups.
+8. HealthKit auto check-off (fast-follow phase) — requires paid Developer
+   Program account.
+9. TestFlight / App Store submission — requires paid Developer Program
+   account; listing, screenshots, privacy nutrition label (relevant once
+   HealthKit is added, since Apple requires disclosure of health-data
+   usage).
 
 ## Open item to confirm before/during deployment
 
 - **Apple Developer Program enrollment** ($99/year) — status unconfirmed as
-  of this writing. Not required to start building or testing in a custom dev
-  client, but required for TestFlight/App Store distribution and for
-  HealthKit entitlements. Worth confirming/starting enrollment early since
-  approval can take a day or two.
+  of this writing. Not required to build or run on your own device via
+  Xcode with a free Apple ID (steps 1–7 above), but required for HealthKit
+  (step 8) and for TestFlight/App Store distribution (step 9). Worth
+  confirming/starting enrollment before those phases since approval can
+  take a day or two.
