@@ -18,6 +18,7 @@ struct TodayView: View {
 
     @State private var selectedDate = Date()
     @State private var addingHabitToBlock: TimeBlock?
+    @State private var editingHabit: Habit?
 
     // Collapsed state per block, persisted across launches.
     @AppStorage("collapsed_morning") private var morningCollapsed = false
@@ -41,6 +42,7 @@ struct TodayView: View {
             }
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
+            .background(Color.white)
             .safeAreaInset(edge: .top) {
                 VStack(spacing: 16) {
                     DateStripView(selectedDate: $selectedDate)
@@ -56,9 +58,10 @@ struct TodayView: View {
                 .padding(.horizontal)
                 .padding(.top, 8)
                 .padding(.bottom, 4)
-                .background(.background)
+                .background(Color.white)
             }
             .navigationTitle(navigationTitle)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     EditButton()
@@ -70,6 +73,13 @@ struct TodayView: View {
                     guard let userId = auth.userId else { return }
                     Task {
                         await store.addHabit(name: name, emoji: emoji, color: color, timeBlock: block, userId: userId)
+                    }
+                }
+            }
+            .sheet(item: $editingHabit) { habit in
+                EditHabitView(habit: habit) { name, emoji, color in
+                    Task {
+                        await store.updateHabit(habit, name: name, emoji: emoji, color: color)
                     }
                 }
             }
@@ -182,13 +192,16 @@ struct TodayView: View {
                     HabitRowView(
                         habit: habit,
                         isCompleted: store.isCompleted(habit, on: selectedDate),
-                        streak: store.streak(for: habit)
-                    ) {
-                        guard let userId = auth.userId else { return }
-                        Task {
-                            await store.toggleCompletion(habit, on: selectedDate, userId: userId)
-                        }
-                    }
+                        streak: store.streak(for: habit),
+                        onToggle: {
+                            guard let userId = auth.userId else { return }
+                            Task {
+                                await store.toggleCompletion(habit, on: selectedDate, userId: userId)
+                            }
+                        },
+                        isEditing: isEditing,
+                        onEdit: { editingHabit = habit }
+                    )
                     .padding(.horizontal)
                     .padding(.bottom, 10)
                 }

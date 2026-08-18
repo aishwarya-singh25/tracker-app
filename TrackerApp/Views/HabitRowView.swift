@@ -10,6 +10,8 @@ struct HabitRowView: View {
     let isCompleted: Bool
     let streak: Int
     let onToggle: () -> Void
+    var isEditing: Bool = false
+    var onEdit: (() -> Void)? = nil
 
     var body: some View {
         HStack(spacing: 12) {
@@ -32,12 +34,21 @@ struct HabitRowView: View {
                 .foregroundStyle(.white)
             }
 
-            Button(action: onToggle) {
-                Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
-                    .font(.title2)
-                    .foregroundStyle(.white, isCompleted ? .white.opacity(0.25) : .clear)
+            if isEditing {
+                Button(action: { onEdit?() }) {
+                    Image(systemName: "pencil.circle.fill")
+                        .font(.title2)
+                        .foregroundStyle(.white, .white.opacity(0.25))
+                }
+                .buttonStyle(.plain)
+            } else {
+                Button(action: onToggle) {
+                    Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
+                        .font(.title2)
+                        .foregroundStyle(.white, isCompleted ? .white.opacity(0.25) : .clear)
+                }
+                .buttonStyle(.plain)
             }
-            .buttonStyle(.plain)
         }
         .padding(16)
         .background(
