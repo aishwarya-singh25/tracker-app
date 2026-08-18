@@ -17,43 +17,44 @@ struct HabitRowView: View {
     private let textColor = Color.black.opacity(0.78)
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 10) {
             Text(habit.emoji)
-                .font(.title2)
+                .font(.subheadline)
 
             Text(habit.name)
-                .font(.headline)
+                .font(.subheadline.weight(.semibold))
                 .foregroundStyle(textColor)
                 .lineLimit(1)
 
             Spacer()
 
             if streak > 0 {
-                HStack(spacing: 3) {
+                HStack(spacing: 2) {
                     Text("🔥")
                     Text("\(streak)")
                 }
-                .font(.subheadline.weight(.semibold))
+                .font(.caption.weight(.semibold))
                 .foregroundStyle(textColor)
             }
 
             Button(action: onToggle) {
                 Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
-                    .font(.title2)
+                    .font(.subheadline)
                     .foregroundStyle(textColor, isCompleted ? Color.black.opacity(0.12) : .clear)
             }
             .buttonStyle(.plain)
         }
-        .padding(16)
+        .padding(.vertical, 9)
+        .padding(.horizontal, 12)
         .background(
             LinearGradient(
                 colors: [Color(hex: habit.color), Color(hex: habit.color).opacity(0.85)],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             ),
-            in: RoundedRectangle(cornerRadius: 18)
+            in: RoundedRectangle(cornerRadius: 14)
         )
-        .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 3)
+        .shadow(color: Color.black.opacity(0.06), radius: 5, x: 0, y: 2)
     }
 }
 

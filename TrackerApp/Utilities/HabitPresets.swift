@@ -13,24 +13,13 @@ enum HabitPresets {
     /// habit-agnostic glyph rather than anything category-specific.
     static let defaultEmoji = "💡"
 
-    /// Curated icon set for habits. Any human/person glyph uses the female
-    /// presentation (e.g. "🏃‍♀️" not "🏃") for consistency. Not exhaustive —
-    /// the Add/Edit Habit screen also lets you type any emoji from your
-    /// keyboard, so this is just a quick-pick shortlist.
+    /// Quick-pick shortlist shown in the Add/Edit Habit grid (3 rows at
+    /// 6/row) — kept short since the same screen also lets you type any
+    /// emoji from your keyboard for everything this list doesn't cover.
     static let emojis = [
-        defaultEmoji,
-        // Fitness & movement
-        "🏃‍♀️", "🚶‍♀️", "🏋️‍♀️", "🤸‍♀️", "🚴‍♀️", "🧘‍♀️", "🏊‍♀️", "⛹️‍♀️",
-        // Mindfulness & rest
-        "😴", "🙏", "🧠", "❤️", "🌙", "☀️", "🕯️", "🌿",
-        // Food & health
-        "🥗", "💧", "🍎", "🥦", "💊", "🦷", "🧴", "🍽️",
-        // Work & focus
-        "📚", "✍️", "💻", "🎯", "📵", "🕰️", "🗓️", "💼",
-        // Home & chores
-        "🧹", "🧺", "🪴", "🐾", "👩‍🍳", "👩‍💻", "🚭",
-        // Hobbies & creativity
-        "🎨", "🎸", "📖", "🎧", "🧵", "📷",
+        defaultEmoji, "🏃‍♀️", "🧘‍♀️", "🥗", "💧", "😴",
+        "📚", "💻", "🎯", "🧹", "🎨", "❤️",
+        "🙏", "🦷", "💊", "🚴‍♀️", "🎸", "🌿",
     ]
 
     /// Hex strings for the habit-card background — soft/pastel tints so
