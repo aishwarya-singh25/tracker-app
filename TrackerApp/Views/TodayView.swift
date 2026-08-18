@@ -192,18 +192,23 @@ struct TodayView: View {
                     HabitRowView(
                         habit: habit,
                         isCompleted: store.isCompleted(habit, on: selectedDate),
-                        streak: store.streak(for: habit),
-                        onToggle: {
-                            guard let userId = auth.userId else { return }
-                            Task {
-                                await store.toggleCompletion(habit, on: selectedDate, userId: userId)
-                            }
-                        },
-                        isEditing: isEditing,
-                        onEdit: { editingHabit = habit }
-                    )
+                        streak: store.streak(for: habit)
+                    ) {
+                        guard let userId = auth.userId else { return }
+                        Task {
+                            await store.toggleCompletion(habit, on: selectedDate, userId: userId)
+                        }
+                    }
                     .padding(.horizontal)
                     .padding(.bottom, 10)
+                    .swipeActions(edge: .leading) {
+                        Button {
+                            editingHabit = habit
+                        } label: {
+                            Label("Edit", systemImage: "pencil")
+                        }
+                        .tint(.blue)
+                    }
                 }
                 .onMove { source, destination in
                     guard let userId = auth.userId else { return }
