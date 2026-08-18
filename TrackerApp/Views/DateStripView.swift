@@ -27,6 +27,7 @@ struct DateStripView: View {
         HStack(spacing: 8) {
             ForEach(weekDays, id: \.self) { day in
                 let isSelected = calendar.isDate(day, inSameDayAs: selectedDate)
+                let isToday = calendar.isDate(day, inSameDayAs: today)
                 let isFuture = day > today
 
                 Button {
@@ -41,6 +42,11 @@ struct DateStripView: View {
                             .frame(width: 32, height: 32)
                             .background(
                                 Circle().fill(isSelected ? Color.accentColor : Color.clear)
+                            )
+                            .overlay(
+                                Circle()
+                                    .strokeBorder(Color.accentColor, lineWidth: 1.5)
+                                    .opacity(isToday && !isSelected ? 1 : 0)
                             )
                             .foregroundStyle(isSelected ? .white : .primary)
                     }

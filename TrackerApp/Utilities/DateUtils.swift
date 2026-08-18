@@ -29,6 +29,22 @@ enum DayKey {
     }
 }
 
+/// Human-readable date formatting for UI display (e.g. "18-August-2026").
+enum DisplayDate {
+    private static let formatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "dd-MMMM-yyyy"
+        f.calendar = Calendar(identifier: .gregorian)
+        f.timeZone = .current
+        f.locale = Locale(identifier: "en_US_POSIX")
+        return f
+    }()
+
+    static func string(from date: Date) -> String {
+        formatter.string(from: date)
+    }
+}
+
 extension Calendar {
     /// A Gregorian calendar with Monday as the first day of the week, used
     /// consistently for all "which week is this day in" logic (streaks and

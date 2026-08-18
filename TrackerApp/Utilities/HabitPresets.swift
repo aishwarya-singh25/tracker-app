@@ -9,11 +9,25 @@
 import Foundation
 
 enum HabitPresets {
+    /// Curated icon set for habits. Any human/person glyph uses the female
+    /// presentation (e.g. "🏃‍♀️" not "🏃") for consistency.
     static let emojis = [
-        "🏃", "💪", "🧘", "📚", "✍️", "💧", "🥗", "😴",
-        "🦷", "🧹", "🚶", "🎯", "🎨", "🎸", "☀️", "🌙",
-        "💊", "🧠", "❤️", "🙏", "📵", "🚭", "🚴", "🍎",
+        // Fitness & movement
+        "🏃‍♀️", "🚶‍♀️", "🏋️‍♀️", "🤸‍♀️", "🚴‍♀️", "🧘‍♀️", "🏊‍♀️", "⛹️‍♀️",
+        // Mindfulness & rest
+        "😴", "🙏", "🧠", "❤️", "🌙", "☀️", "🕯️", "🌿",
+        // Food & health
+        "🥗", "💧", "🍎", "🥦", "💊", "🦷", "🧴", "🍽️",
+        // Work & focus
+        "📚", "✍️", "💻", "🎯", "📵", "🕰️", "🗓️", "💼",
+        // Home & chores
+        "🧹", "🧺", "🪴", "🐾", "👩‍🍳", "👩‍💻", "🚭",
+        // Hobbies & creativity
+        "🎨", "🎸", "📖", "🎧", "🧵", "📷",
     ]
+
+    /// The emoji assigned when a habit has none selected.
+    static let defaultEmoji = emojis[0]
 
     /// Hex strings, chosen to read clearly as both a background fill and text-legible.
     static let colors = [
