@@ -22,16 +22,17 @@ enum HabitPresets {
         "🙏", "🦷", "💊", "🚴‍♀️", "🎸", "🌿",
     ]
 
-    /// Hex strings for the habit-card background — soft/pastel tints so
-    /// dark text stays legible on top of them.
+    /// Hex strings for the habit-card background — muted mid-tones (between
+    /// the original saturated hues and a too-light pastel) so dark text
+    /// stays legible while the card still reads with real color.
     static let colors = [
-        "#DCE4FF", // light blue
-        "#D9F5E3", // light green
-        "#FFE1D6", // light coral
-        "#F2E4D2", // light tan
-        "#E7E1FF", // light purple
-        "#FFDCE1", // light pink/red
-        "#D7F5F2", // light teal
-        "#E4EAFB", // light periwinkle
+        "#94A9FF", // blue
+        "#86DEAF", // green
+        "#FFAD97", // coral
+        "#CDAD88", // tan
+        "#B8A7FF", // purple
+        "#F8989D", // pink/red
+        "#8BDAD9", // teal
+        "#9FBBF5", // periwinkle
     ]
 }

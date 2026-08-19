@@ -157,6 +157,9 @@ struct TodayView: View {
             Spacer()
 
             Button {
+                // Make sure the block is visible so the newly added habit
+                // actually shows up instead of landing in a collapsed section.
+                collapsed.wrappedValue = false
                 addingHabitToBlock = block
             } label: {
                 Image(systemName: "plus.circle.fill")
