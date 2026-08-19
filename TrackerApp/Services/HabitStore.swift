@@ -150,23 +150,34 @@ final class HabitStore: ObservableObject {
         }
     }
 
-    /// Updates a habit's name/emoji/color (edited via the Edit-mode sheet).
-    func updateHabit(_ habit: Habit, name: String, emoji: String, color: String) async {
+    /// Updates a habit's name/icon/color, and optionally moves it to a
+    /// different time block (edited via the Edit sheet). Moving to a new
+    /// block appends it to the end of that block's order.
+    func updateHabit(_ habit: Habit, name: String, emoji: String, color: String, timeBlock: TimeBlock) async {
         guard let index = habits.firstIndex(where: { $0.id == habit.id }) else { return }
-        let previousHabit = habits[index]
+        let previousHabits = habits
+
+        let movedBlock = habit.timeBlock != timeBlock
+        let newSortOrder = movedBlock ? habits(in: timeBlock).count : habit.sortOrder
 
         habits[index].name = name
         habits[index].emoji = emoji
         habits[index].color = color
+        habits[index].timeBlock = timeBlock
+        habits[index].sortOrder = newSortOrder
 
+        let payload = HabitUpdate(
+            name: name, emoji: emoji, color: color,
+            time_block: timeBlock.rawValue, sort_order: newSortOrder
+        )
         do {
             try await client
                 .from("habits")
-                .update(["name": name, "emoji": emoji, "color": color])
+                .update(payload)
                 .eq("id", value: habit.id)
                 .execute()
         } catch {
-            habits[index] = previousHabit
+            habits = previousHabits
             errorMessage = "Couldn't save that change — check your connection and try again."
         }
     }

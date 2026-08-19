@@ -77,9 +77,9 @@ struct TodayView: View {
                 }
             }
             .sheet(item: $editingHabit) { habit in
-                EditHabitView(habit: habit) { name, emoji, color in
+                EditHabitView(habit: habit) { name, emoji, color, timeBlock in
                     Task {
-                        await store.updateHabit(habit, name: name, emoji: emoji, color: color)
+                        await store.updateHabit(habit, name: name, emoji: emoji, color: color, timeBlock: timeBlock)
                     }
                 }
             }
@@ -212,6 +212,13 @@ struct TodayView: View {
                             Label("Edit", systemImage: "pencil")
                         }
                         .tint(.blue)
+                    }
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+                            Task { await store.archiveHabit(habit) }
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
                     }
                 }
                 .onMove { source, destination in
