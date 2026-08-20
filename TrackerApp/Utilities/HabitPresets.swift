@@ -9,35 +9,30 @@
 import Foundation
 
 enum HabitPresets {
-    /// Curated icon set for habits. Any human/person glyph uses the female
-    /// presentation (e.g. "🏃‍♀️" not "🏃") for consistency.
+    /// The emoji assigned when a habit has none selected — a generic,
+    /// habit-agnostic glyph rather than anything category-specific.
+    static let defaultEmoji = "💡"
+
+    /// Quick-pick shortlist shown in the Add/Edit Habit grid (3 rows at
+    /// 6/row) — kept short since the same screen also lets you type any
+    /// emoji from your keyboard for everything this list doesn't cover.
     static let emojis = [
-        // Fitness & movement
-        "🏃‍♀️", "🚶‍♀️", "🏋️‍♀️", "🤸‍♀️", "🚴‍♀️", "🧘‍♀️", "🏊‍♀️", "⛹️‍♀️",
-        // Mindfulness & rest
-        "😴", "🙏", "🧠", "❤️", "🌙", "☀️", "🕯️", "🌿",
-        // Food & health
-        "🥗", "💧", "🍎", "🥦", "💊", "🦷", "🧴", "🍽️",
-        // Work & focus
-        "📚", "✍️", "💻", "🎯", "📵", "🕰️", "🗓️", "💼",
-        // Home & chores
-        "🧹", "🧺", "🪴", "🐾", "👩‍🍳", "👩‍💻", "🚭",
-        // Hobbies & creativity
-        "🎨", "🎸", "📖", "🎧", "🧵", "📷",
+        defaultEmoji, "🏃‍♀️", "🧘‍♀️", "🥗", "💧", "😴",
+        "📚", "💻", "🎯", "🧹", "🎨", "❤️",
+        "🙏", "🦷", "💊", "🚴‍♀️", "🎸", "🌿",
     ]
 
-    /// The emoji assigned when a habit has none selected.
-    static let defaultEmoji = emojis[0]
-
-    /// Hex strings, chosen to read clearly as both a background fill and text-legible.
+    /// Hex strings for the habit-card background — muted mid-tones (between
+    /// the original saturated hues and a too-light pastel) so dark text
+    /// stays legible while the card still reads with real color.
     static let colors = [
-        "#4C6FFF", // blue
-        "#34C77B", // green
-        "#FF7A59", // coral
-        "#A8763E", // brown
-        "#8A6DFF", // purple
-        "#F2555A", // red
-        "#3FC0C0", // teal
-        "#5B8DEF", // periwinkle
+        "#94A9FF", // blue
+        "#86DEAF", // green
+        "#FFAD97", // coral
+        "#CDAD88", // tan
+        "#B8A7FF", // purple
+        "#F8989D", // pink/red
+        "#8BDAD9", // teal
+        "#9FBBF5", // periwinkle
     ]
 }

@@ -82,6 +82,15 @@ struct NewHabit: Encodable {
     let sort_order: Int
 }
 
+/// Payload for editing an existing habit's name/icon/color/time-block.
+struct HabitUpdate: Encodable {
+    let name: String
+    let emoji: String
+    let color: String
+    let time_block: String
+    let sort_order: Int
+}
+
 /// Payload for creating a new habit_log row (marking a habit done for a day).
 struct NewHabitLog: Encodable {
     let habit_id: UUID

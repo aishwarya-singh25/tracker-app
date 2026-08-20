@@ -10,21 +10,24 @@ import SwiftUI
 
 struct EditHabitView: View {
     let habit: Habit
-    let onSave: (String, String, String) -> Void // name, emoji, color
+    let onSave: (String, String, String, TimeBlock) -> Void // name, emoji, color, timeBlock
 
     @Environment(\.dismiss) private var dismiss
     @State private var name: String
     @State private var selectedEmoji: String
     @State private var selectedColor: String
+    @State private var selectedTimeBlock: TimeBlock
+    @State private var customEmojiInput = ""
 
     private let emojiColumns = Array(repeating: GridItem(.flexible()), count: 6)
 
-    init(habit: Habit, onSave: @escaping (String, String, String) -> Void) {
+    init(habit: Habit, onSave: @escaping (String, String, String, TimeBlock) -> Void) {
         self.habit = habit
         self.onSave = onSave
         _name = State(initialValue: habit.name)
         _selectedEmoji = State(initialValue: habit.emoji)
         _selectedColor = State(initialValue: habit.color)
+        _selectedTimeBlock = State(initialValue: habit.timeBlock)
     }
 
     var body: some View {
@@ -47,6 +50,31 @@ struct EditHabitView: View {
                         }
                     }
                     .padding(.vertical, 4)
+
+                    HStack {
+                        Text("Or type any emoji")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        TextField("🙂", text: $customEmojiInput)
+                            .multilineTextAlignment(.trailing)
+                            .frame(width: 60)
+                            .onChange(of: customEmojiInput) { _, newValue in
+                                if let lastCharacter = newValue.last {
+                                    selectedEmoji = String(lastCharacter)
+                                }
+                                customEmojiInput = ""
+                            }
+                    }
+                }
+
+                Section("Time of Day") {
+                    Picker("Time of Day", selection: $selectedTimeBlock) {
+                        ForEach(TimeBlock.allCases) { block in
+                            Text(block.title).tag(block)
+                        }
+                    }
+                    .pickerStyle(.segmented)
                 }
 
                 Section("Color") {
@@ -70,7 +98,7 @@ struct EditHabitView: View {
                         habit: Habit(
                             id: habit.id, userId: habit.userId,
                             name: name.isEmpty ? "Habit name" : name,
-                            emoji: selectedEmoji, color: selectedColor, timeBlock: habit.timeBlock,
+                            emoji: selectedEmoji, color: selectedColor, timeBlock: selectedTimeBlock,
                             sortOrder: habit.sortOrder, archivedAt: habit.archivedAt, createdAt: habit.createdAt
                         ),
                         isCompleted: false,
@@ -93,7 +121,7 @@ struct EditHabitView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
                         let emoji = selectedEmoji.isEmpty ? HabitPresets.defaultEmoji : selectedEmoji
-                        onSave(name.trimmingCharacters(in: .whitespacesAndNewlines), emoji, selectedColor)
+                        onSave(name.trimmingCharacters(in: .whitespacesAndNewlines), emoji, selectedColor, selectedTimeBlock)
                         dismiss()
                     }
                     .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
@@ -110,6 +138,6 @@ struct EditHabitView: View {
             color: "#4C6FFF", timeBlock: .morning, sortOrder: 0,
             archivedAt: nil, createdAt: Date()
         ),
-        onSave: { _, _, _ in }
+        onSave: { _, _, _, _ in }
     )
 }

@@ -42,7 +42,7 @@ struct TodayView: View {
             }
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
-            .background(Color.white)
+            .background(Color(.systemGroupedBackground))
             .safeAreaInset(edge: .top) {
                 VStack(spacing: 16) {
                     DateStripView(selectedDate: $selectedDate)
@@ -58,7 +58,7 @@ struct TodayView: View {
                 .padding(.horizontal)
                 .padding(.top, 8)
                 .padding(.bottom, 4)
-                .background(Color.white)
+                .background(Color(.systemGroupedBackground))
             }
             .navigationTitle(navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
@@ -77,9 +77,9 @@ struct TodayView: View {
                 }
             }
             .sheet(item: $editingHabit) { habit in
-                EditHabitView(habit: habit) { name, emoji, color in
+                EditHabitView(habit: habit) { name, emoji, color, timeBlock in
                     Task {
-                        await store.updateHabit(habit, name: name, emoji: emoji, color: color)
+                        await store.updateHabit(habit, name: name, emoji: emoji, color: color, timeBlock: timeBlock)
                     }
                 }
             }
@@ -91,7 +91,7 @@ struct TodayView: View {
     }
 
     private var allHabitsToday: [Habit] {
-        TimeBlock.allCases.flatMap { store.habits(in: $0) }
+        store.orderedHabits
     }
 
     @ViewBuilder
@@ -157,6 +157,9 @@ struct TodayView: View {
             Spacer()
 
             Button {
+                // Make sure the block is visible so the newly added habit
+                // actually shows up instead of landing in a collapsed section.
+                collapsed.wrappedValue = false
                 addingHabitToBlock = block
             } label: {
                 Image(systemName: "plus.circle.fill")
@@ -166,6 +169,7 @@ struct TodayView: View {
         }
         .padding(.horizontal)
         .padding(.top, 8)
+        .padding(.bottom, 10)
         .textCase(nil)
     }
 
@@ -200,7 +204,7 @@ struct TodayView: View {
                         }
                     }
                     .padding(.horizontal)
-                    .padding(.bottom, 10)
+                    .padding(.bottom, 6)
                     .swipeActions(edge: .leading) {
                         Button {
                             editingHabit = habit
@@ -208,6 +212,13 @@ struct TodayView: View {
                             Label("Edit", systemImage: "pencil")
                         }
                         .tint(.blue)
+                    }
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+                            Task { await store.archiveHabit(habit) }
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
                     }
                 }
                 .onMove { source, destination in
