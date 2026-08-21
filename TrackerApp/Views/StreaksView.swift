@@ -46,13 +46,14 @@ struct StreaksView: View {
     }
 
     private var weekGrid: some View {
-        Grid(alignment: .leading, horizontalSpacing: 6, verticalSpacing: 14) {
+        Grid(alignment: .leading, horizontalSpacing: 5, verticalSpacing: 14) {
             GridRow {
                 Text("")
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .frame(maxWidth: 140, alignment: .leading)
                 ForEach(weekDays, id: \.self) { day in
                     weekdayHeader(day)
                 }
+                Text("")
             }
 
             ForEach(store.orderedHabits) { habit in
@@ -63,20 +64,23 @@ struct StreaksView: View {
                         Text(habit.name)
                             .font(.subheadline)
                             .lineLimit(1)
-
-                        if streak > 0 {
-                            HStack(spacing: 2) {
-                                Text("🔥")
-                                Text("\(streak)")
-                            }
-                            .font(.caption2.weight(.semibold))
-                            .foregroundStyle(.secondary)
-                        }
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .frame(maxWidth: 140, alignment: .leading)
 
                     ForEach(weekDays, id: \.self) { day in
                         dot(for: habit, on: day)
+                    }
+
+                    if streak > 0 {
+                        HStack(spacing: 2) {
+                            Text("🔥")
+                            Text("\(streak)")
+                        }
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                        .padding(.leading, 4)
+                    } else {
+                        Text("")
                     }
                 }
             }
