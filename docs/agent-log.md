@@ -73,3 +73,15 @@ Changes, once the mockup was approved:
   freed up by smaller/tighter dots instead of leaving a gap.
 
 Build: `xcodebuild ... build` → BUILD SUCCEEDED. Committed as `3d9c502`.
+
+### Follow-up 2 (same day, same branch): Streaks spacing + streak-number position
+
+Small direct tweak, no subagents. `StreaksView.swift`: capped the name
+column at `maxWidth: 140` (was `.infinity`) so the dot cluster sits closer
+to the habit name instead of trailing off across the row; moved the 🔥
+streak badge out of the name `HStack` into a new trailing Grid column after
+Sunday's dot, filling the space freed up by capping the name column.
+Clarified placement with the user first (far-right-after-dots vs.
+far-left-before-emoji) via a quick question before implementing.
+
+Build: `xcodebuild ... build` → BUILD SUCCEEDED. Committed as `54bad09`.
