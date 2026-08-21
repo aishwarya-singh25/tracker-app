@@ -29,6 +29,9 @@ enum HabitPresets {
     /// The emoji assigned when a habit has none selected.
     static let defaultEmoji = emojis[0]
 
+    /// Quick-pick emojis shown as shortcuts atop the emoji picker.
+    static let suggestedEmojis = ["🏃‍♀️", "📚", "💧"]
+
     /// Hex strings, chosen to read clearly as both a background fill and text-legible.
     static let colors = [
         "#4C6FFF", // blue

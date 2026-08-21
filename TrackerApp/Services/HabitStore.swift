@@ -79,6 +79,11 @@ final class HabitStore: ObservableObject {
         habits.filter { $0.timeBlock == block }
     }
 
+    /// Canonical display order: grouped by time block (Morning → Night), then sort order within each block.
+    var orderedHabits: [Habit] {
+        TimeBlock.allCases.flatMap { habits(in: $0) }
+    }
+
     /// Toggles a habit's completion for the given day, writing straight to
     /// Supabase. Un-checking deletes that day's log row rather than storing
     /// a false/undone state.

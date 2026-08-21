@@ -17,8 +17,6 @@ struct EditHabitView: View {
     @State private var selectedEmoji: String
     @State private var selectedColor: String
 
-    private let emojiColumns = Array(repeating: GridItem(.flexible()), count: 6)
-
     init(habit: Habit, onSave: @escaping (String, String, String) -> Void) {
         self.habit = habit
         self.onSave = onSave
@@ -35,18 +33,7 @@ struct EditHabitView: View {
                 }
 
                 Section("Icon") {
-                    LazyVGrid(columns: emojiColumns, spacing: 12) {
-                        ForEach(HabitPresets.emojis, id: \.self) { emoji in
-                            Text(emoji)
-                                .font(.title2)
-                                .frame(width: 40, height: 40)
-                                .background(
-                                    Circle().fill(selectedEmoji == emoji ? Color.accentColor.opacity(0.2) : .clear)
-                                )
-                                .onTapGesture { selectedEmoji = emoji }
-                        }
-                    }
-                    .padding(.vertical, 4)
+                    EmojiPickerView(selectedEmoji: $selectedEmoji)
                 }
 
                 Section("Color") {
@@ -92,8 +79,7 @@ struct EditHabitView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        let emoji = selectedEmoji.isEmpty ? HabitPresets.defaultEmoji : selectedEmoji
-                        onSave(name.trimmingCharacters(in: .whitespacesAndNewlines), emoji, selectedColor)
+                        onSave(name.trimmingCharacters(in: .whitespacesAndNewlines), selectedEmoji, selectedColor)
                         dismiss()
                     }
                     .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)

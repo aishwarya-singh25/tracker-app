@@ -90,13 +90,9 @@ struct TodayView: View {
         Calendar.habitCalendar.isDateInToday(selectedDate) ? "Today" : DisplayDate.string(from: selectedDate)
     }
 
-    private var allHabitsToday: [Habit] {
-        TimeBlock.allCases.flatMap { store.habits(in: $0) }
-    }
-
     @ViewBuilder
     private var progressSummary: some View {
-        let habits = allHabitsToday
+        let habits = store.orderedHabits
         if !habits.isEmpty {
             let completed = habits.filter { store.isCompleted($0, on: selectedDate) }.count
             VStack(alignment: .leading, spacing: 6) {

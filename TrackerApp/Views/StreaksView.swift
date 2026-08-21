@@ -48,21 +48,31 @@ struct StreaksView: View {
         Grid(alignment: .leading, horizontalSpacing: 10, verticalSpacing: 14) {
             GridRow {
                 Text("")
-                    .frame(minWidth: 90, alignment: .leading)
+                    .frame(minWidth: 110, alignment: .leading)
                 ForEach(weekDays, id: \.self) { day in
                     weekdayHeader(day)
                 }
             }
 
-            ForEach(store.habits) { habit in
+            ForEach(store.orderedHabits) { habit in
+                let streak = store.streak(for: habit)
                 GridRow {
                     HStack(spacing: 6) {
                         Text(habit.emoji)
                         Text(habit.name)
                             .font(.subheadline)
                             .lineLimit(1)
+
+                        if streak > 0 {
+                            HStack(spacing: 2) {
+                                Text("🔥")
+                                Text("\(streak)")
+                            }
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                        }
                     }
-                    .frame(minWidth: 90, alignment: .leading)
+                    .frame(minWidth: 110, alignment: .leading)
 
                     ForEach(weekDays, id: \.self) { day in
                         dot(for: habit, on: day)
@@ -91,7 +101,7 @@ struct StreaksView: View {
 
         Circle()
             .fill(isCompleted ? Color(hex: habit.color) : Color.secondary.opacity(0.15))
-            .frame(width: 28, height: 28)
+            .frame(width: 22, height: 22)
             .opacity(isFuture ? 0.4 : 1)
     }
 }

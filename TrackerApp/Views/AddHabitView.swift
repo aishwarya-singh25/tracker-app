@@ -13,10 +13,8 @@ struct AddHabitView: View {
 
     @Environment(\.dismiss) private var dismiss
     @State private var name = ""
-    @State private var selectedEmoji = HabitPresets.defaultEmoji
+    @State private var selectedEmoji = ""
     @State private var selectedColor = HabitPresets.colors[0]
-
-    private let emojiColumns = Array(repeating: GridItem(.flexible()), count: 6)
 
     var body: some View {
         NavigationStack {
@@ -26,18 +24,7 @@ struct AddHabitView: View {
                 }
 
                 Section("Icon") {
-                    LazyVGrid(columns: emojiColumns, spacing: 12) {
-                        ForEach(HabitPresets.emojis, id: \.self) { emoji in
-                            Text(emoji)
-                                .font(.title2)
-                                .frame(width: 40, height: 40)
-                                .background(
-                                    Circle().fill(selectedEmoji == emoji ? Color.accentColor.opacity(0.2) : .clear)
-                                )
-                                .onTapGesture { selectedEmoji = emoji }
-                        }
-                    }
-                    .padding(.vertical, 4)
+                    EmojiPickerView(selectedEmoji: $selectedEmoji)
                 }
 
                 Section("Color") {
@@ -82,8 +69,7 @@ struct AddHabitView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Add") {
-                        let emoji = selectedEmoji.isEmpty ? HabitPresets.defaultEmoji : selectedEmoji
-                        onSave(name.trimmingCharacters(in: .whitespacesAndNewlines), emoji, selectedColor)
+                        onSave(name.trimmingCharacters(in: .whitespacesAndNewlines), selectedEmoji, selectedColor)
                         dismiss()
                     }
                     .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
