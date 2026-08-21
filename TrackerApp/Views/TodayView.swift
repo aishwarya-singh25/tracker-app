@@ -196,7 +196,7 @@ struct TodayView: View {
                         }
                     }
                     .padding(.horizontal)
-                    .padding(.bottom, 10)
+                    .padding(.bottom, 6)
                     .swipeActions(edge: .leading) {
                         Button {
                             editingHabit = habit

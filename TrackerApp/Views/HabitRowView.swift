@@ -11,44 +11,44 @@ struct HabitRowView: View {
     let streak: Int
     let onToggle: () -> Void
 
+    /// A dark, warm neutral that stays readable on every pastel row color —
+    /// deliberately not `.primary`, which would flip to white in dark mode
+    /// against these fixed-light backgrounds.
+    private static let textColor = Color(hex: "#2E2A24")
+
+    private var rowColor: Color { Color(hex: HabitPresets.displayColor(for: habit.color)) }
+
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 9) {
             Text(habit.emoji)
-                .font(.title2)
+                .font(.body)
 
             Text(habit.name)
-                .font(.headline)
-                .foregroundStyle(.white)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(Self.textColor)
                 .lineLimit(1)
 
             Spacer()
 
             if streak > 0 {
-                HStack(spacing: 3) {
+                HStack(spacing: 2) {
                     Text("🔥")
                     Text("\(streak)")
                 }
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.white)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(Self.textColor.opacity(0.6))
             }
 
             Button(action: onToggle) {
                 Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
-                    .font(.title2)
-                    .foregroundStyle(.white, isCompleted ? .white.opacity(0.25) : .clear)
+                    .font(.title3)
+                    .foregroundStyle(isCompleted ? Self.textColor : Self.textColor.opacity(0.35))
             }
             .buttonStyle(.plain)
         }
-        .padding(16)
-        .background(
-            LinearGradient(
-                colors: [Color(hex: habit.color), Color(hex: habit.color).opacity(0.85)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            ),
-            in: RoundedRectangle(cornerRadius: 18)
-        )
-        .shadow(color: Color(hex: habit.color).opacity(0.35), radius: 10, x: 0, y: 4)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 9)
+        .background(rowColor, in: RoundedRectangle(cornerRadius: 14))
     }
 }
 

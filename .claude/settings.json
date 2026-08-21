@@ -3,7 +3,11 @@
     "allow": [
       "Bash(git add *)",
       "Bash(git commit *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(git checkout *)",
+      "Bash(xcodebuild -list -project \"/Users/aishwaryasingh/Github stuff/GitHub/tracker-app/TrackerApp.xcodeproj\")",
+      "Bash(node /private/tmp/claude-501/bundled-skills/2.1.236/af4c78284095b7b10c64fda662c62c47/design/seed-canvas.mjs --template /private/tmp/claude-501/bundled-skills/2.1.236/af4c78284095b7b10c64fda662c62c47/design/payload.template.html --out habit-tracker-redesign.html --title 'Habit Tracker Redesign' --artboard Main.dc.html)",
+      "Bash(node \"/private/tmp/claude-501/bundled-skills/2.1.236/af4c78284095b7b10c64fda662c62c47/design/seed-canvas.mjs\" --check habit-tracker-redesign.html)"
     ]
   }
 }

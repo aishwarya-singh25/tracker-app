@@ -39,16 +39,17 @@ struct StreaksView: View {
                     }
                 }
                 .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
             .navigationTitle("Streaks")
         }
     }
 
     private var weekGrid: some View {
-        Grid(alignment: .leading, horizontalSpacing: 10, verticalSpacing: 14) {
+        Grid(alignment: .leading, horizontalSpacing: 6, verticalSpacing: 14) {
             GridRow {
                 Text("")
-                    .frame(minWidth: 110, alignment: .leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 ForEach(weekDays, id: \.self) { day in
                     weekdayHeader(day)
                 }
@@ -57,7 +58,7 @@ struct StreaksView: View {
             ForEach(store.orderedHabits) { habit in
                 let streak = store.streak(for: habit)
                 GridRow {
-                    HStack(spacing: 6) {
+                    HStack(spacing: 5) {
                         Text(habit.emoji)
                         Text(habit.name)
                             .font(.subheadline)
@@ -72,7 +73,7 @@ struct StreaksView: View {
                             .foregroundStyle(.secondary)
                         }
                     }
-                    .frame(minWidth: 110, alignment: .leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
                     ForEach(weekDays, id: \.self) { day in
                         dot(for: habit, on: day)
@@ -86,12 +87,12 @@ struct StreaksView: View {
     private func weekdayHeader(_ day: Date) -> some View {
         let isToday = calendar.isDate(day, inSameDayAs: today)
         Text(Self.letterFormatter.string(from: day))
-            .font(.caption.weight(.semibold))
-            .frame(width: 28, height: 28)
+            .font(.caption2.weight(isToday ? .bold : .semibold))
+            .frame(width: 16, height: 16)
             .background(
-                Circle().fill(isToday ? Color.red.opacity(0.85) : Color.secondary.opacity(0.12))
+                RoundedRectangle(cornerRadius: 4).fill(isToday ? Color.primary.opacity(0.08) : Color.clear)
             )
-            .foregroundStyle(isToday ? .white : .secondary)
+            .foregroundStyle(isToday ? .primary : .secondary)
     }
 
     @ViewBuilder
@@ -100,8 +101,8 @@ struct StreaksView: View {
         let isCompleted = store.isCompleted(habit, on: day)
 
         Circle()
-            .fill(isCompleted ? Color(hex: habit.color) : Color.secondary.opacity(0.15))
-            .frame(width: 22, height: 22)
+            .fill(isCompleted ? Color(hex: HabitPresets.displayColor(for: habit.color)) : Color.secondary.opacity(0.15))
+            .frame(width: 16, height: 16)
             .opacity(isFuture ? 0.4 : 1)
     }
 }
