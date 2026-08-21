@@ -49,3 +49,27 @@ the plan before implementation):
 (`xcodebuild ... build` → BUILD SUCCEEDED) by the agents themselves. Branch
 intentionally left unmerged — awaiting the user's manual validation in Xcode
 per the 4-point checklist in the plan file before merge to `main`.
+
+### Follow-up (same day, same branch): pastel palette + compact rows + tighter Streaks grid
+
+No subagents this round — done directly by the orchestrator (Sonnet 5), plus
+one design-mockup pass published as an Artifact for the user to approve
+before any code changed (`https://claude.ai/code/artifact/17cb7429-...`,
+iterated once on user feedback: lighter/happier pastels, no brown; removed
+a dead-space gap on the right of the Streaks rows).
+
+Changes, once the mockup was approved:
+- `HabitPresets.swift`: replaced the 8 saturated preset colors with a
+  pastel palette; added `legacyColorMap`/`displayColor(for:)` so habits
+  created under the old palette render pastel too, without a DB migration.
+- `HabitRowView.swift`: flat pastel fill (no gradient), fixed dark
+  warm-neutral text/icon color instead of white, tighter padding
+  (16→12/9) and smaller type — visibly shorter rows.
+- `TodayView.swift`: reduced inter-row bottom padding (10→6).
+- `StreaksView.swift`: dots 22→16px, grid horizontal spacing 10→6,
+  weekday header simplified from a 28px circle to a plain letter (subtle
+  highlight for "today"), and the name column changed from a fixed
+  110pt width to `frame(maxWidth: .infinity)` so it absorbs the space
+  freed up by smaller/tighter dots instead of leaving a gap.
+
+Build: `xcodebuild ... build` → BUILD SUCCEEDED. Committed as `3d9c502`.
